@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include <libpq-fe.h>
+#include <string.h>
 #include "Calendar.h"
 
 
@@ -19,7 +20,7 @@ void Calendar_Window(GtkWidget* Widget , gpointer p)
    gtk_container_set_border_width(GTK_CONTAINER(Windows), 100) ;
    gtk_window_set_position(GTK_WINDOW(Windows), GTK_WIN_POS_CENTER) ;
    g_signal_connect(G_OBJECT(Windows), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
-   g_signal_connect(G_OBJECT(Calendar), "day-selected-double-click", G_CALLBACK(Events), NULL);
+   g_signal_connect(G_OBJECT(Calendar), "day-selected-double-click", G_CALLBACK(Events), Calendar);
    //g_signal_connect(G_OBJECT(button1), "clicked", G_CALLBACK(Terminer), &i);
    gtk_widget_show_all(Windows) ;
    gtk_main();
@@ -30,7 +31,6 @@ void Events(GtkCalendar* c, gpointer p)
 {
    GtkWidget* label = NULL ;
    GtkWidget* button = NULL ;
-   GtkWidget* Textarea = NULL ;
    GtkWidget* Windows = NULL ;
    GtkWidget* vbox = NULL ;
    gchar* text = NULL ;
@@ -52,7 +52,7 @@ void Events(GtkCalendar* c, gpointer p)
    gtk_container_set_border_width(GTK_CONTAINER(Windows), 100) ;
    gtk_window_set_position(GTK_WINDOW(Windows), GTK_WIN_POS_CENTER) ;
    g_signal_connect(G_OBJECT(Windows), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
-   g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(Enregistrer), Textarea);
+   g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(Enregistrer), p);
    //g_signal_connect(G_OBJECT(button1), "clicked", G_CALLBACK(Terminer), &i);
    gtk_widget_show_all(Windows) ;
    gtk_main();
@@ -61,11 +61,37 @@ void Events(GtkCalendar* c, gpointer p)
 void Enregistrer(GtkWidget* w , gpointer p)
 {
 	GtkTextBuffer* text_buffer = NULL ;
+   guint jours;
+   guint mois;
+   guint annee;
 	GtkTextIter start, end ;
-	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(p)) ;
+   PGconn     *conn;
+   const char *values[2];
+   PGresult   *res;
+   gtk_calendar_get_date(GTK_CALENDAR(p), &annee, &mois, &jours) ;
+	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(Textarea)) ;
 	gtk_text_buffer_get_start_iter(text_buffer,&start) ;
 	gtk_text_buffer_get_end_iter(text_buffer,&end) ;
 	gchar* buf = gtk_text_buffer_get_text(text_buffer,&start,&end, 0) ;
-	printf("%s\n", buf) ;
+   char* str = (char*)malloc(10*sizeof(char));
+   sprintf(str, "%d/%d/%d", jours,mois,annee);
+   values[0] = (const char*)buf;
+   values[1] = (const char*)str;
+    conn = PQsetdbLogin("localhost", "5432", "", "", "calendrier", "postgres", "Aissatoudia") ;
+
+    /* Vérification de la connexion*/
+    if (PQstatus(conn) != CONNECTION_OK)
+    {
+        fprintf(stderr, "Connection to database failed: %s",
+                PQerrorMessage(conn));
+
+    }
+    else
+        printf("Connexion etablie\n") ;
+   res = PQexecParams(conn, "INSERT INTO Events VALUES($1, $2)", 2, NULL, values,
+    NULL, NULL, 0);
+    if (PQresultStatus(res) != PGRES_COMMAND_OK)
+      printf("ERREUR D'INSERT\n");
 	g_free(buf) ;
+   free(str) ;
 }

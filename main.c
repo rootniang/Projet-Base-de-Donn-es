@@ -14,16 +14,16 @@ exit_nicely(PGconn *conn)
 int main(int argc, char **argv)
 {
   gtk_init(&argc, &argv) ;
-  PGconn     *conn ;
   GtkWidget* MainWindow = NULL ;
   GtkWidget* label = NULL ;
+  PGconn     *conn;
   GtkWidget* button1 = NULL ;
   GtkWidget* button2 = NULL ;
   GtkWidget* vbox = NULL ;
   gchar* text = NULL ;
 
     //Connexion à la base de donnée
-  conn = PQsetdbLogin("localhost", "5432", "", "", "postgres", "postgres", "Aissatoudia") ;
+  conn = PQsetdbLogin("localhost", "5432", "", "", "calendrier", "postgres", "Aissatoudia") ;
 
     /* Vérification de la connexion*/
     if (PQstatus(conn) != CONNECTION_OK)

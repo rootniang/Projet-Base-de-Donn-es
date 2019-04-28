@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 #include <libpq-fe.h>
 
+static GtkWidget* Textarea = NULL ;
 void Calendar_Window(GtkWidget* , gpointer) ;
 void Events(GtkCalendar*, gpointer) ;
 void Enregistrer(GtkWidget* , gpointer) ;
