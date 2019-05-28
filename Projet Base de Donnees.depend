@@ -1,12 +1,13 @@
 # depslib dependency file v1.0
-1553119820 source:c:\users\marfa\desktop\tp poo\projet base de donnees\calendar.c
+1557281297 source:c:\users\marfa\desktop\tp poo\projet base de donnees\calendar.c
 	<stdlib.h>
 	<stdio.h>
 	<gtk/gtk.h>
 	<libpq-fe.h>
+	<string.h>
 	"Calendar.h"
 
-1555467546 source:c:\users\marfa\desktop\tp poo\projet base de donnees\main.c
+1557279005 source:c:\users\marfa\desktop\tp poo\projet base de donnees\main.c
 	<stdlib.h>
 	<stdio.h>
 	<gtk/gtk.h>
@@ -2479,7 +2480,7 @@
 1379771716 c:\gtk\include\gtk-3.0\gtk\deprecated\gtkvseparator.h
 	<gtk/gtkseparator.h>
 
-1555467554 c:\users\marfa\desktop\tp poo\projet base de donnees\calendar.h
+1557275528 c:\users\marfa\desktop\tp poo\projet base de donnees\calendar.h
 	<stdlib.h>
 	<stdio.h>
 	<gtk/gtk.h>

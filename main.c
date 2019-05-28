@@ -52,9 +52,9 @@ int main(int argc, char **argv)
   gtk_box_pack_start(GTK_BOX(vbox), button2,0,0,0) ;
   gtk_container_add(GTK_CONTAINER(MainWindow), vbox) ;
   gtk_container_set_border_width(GTK_CONTAINER(MainWindow), 100) ;
-  g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
-  g_signal_connect(G_OBJECT(button2), "clicked", G_CALLBACK(gtk_main_quit), NULL);
   g_signal_connect(G_OBJECT(button1), "clicked", G_CALLBACK(Calendar_Window), NULL);
+  g_signal_connect(G_OBJECT(button2), "clicked", G_CALLBACK(gtk_main_quit), NULL);
+   g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
   gtk_widget_show_all(MainWindow) ;
   gtk_main();
   return 0 ;
